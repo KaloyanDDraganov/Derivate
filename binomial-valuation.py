@@ -43,7 +43,7 @@ if __name__ == "__main__":
     n_values = list(range(1, 25))
     prices = list(map(lambda n: valuateOption(n, maturity=0.5, underlying=18131.97, strike=19200, sigma=0.1216, rf=0.03671), n_values))
 
-    plt.plot(prices, n_values, marker='o', linestyle='-', color='b', label='Option price against n')
+    plt.plot(n_values, prices, marker='o', linestyle='-', color='b', label='Option price against n')
     plt.xscale('log')
     plt.title("Calculating a call price with the binomial method")
     plt.xlabel("Log-Scaled n values")
