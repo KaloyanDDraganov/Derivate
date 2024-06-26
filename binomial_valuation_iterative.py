@@ -29,7 +29,7 @@ def valuateOption(S0, K, T, r, sigma, n, option_type="call"):
     # Backward recursion to calculate the option values at each previous node
     for j in range(n - 1, -1, -1):
         for i in range(j + 1):
-            option_values[i] =  (q * option_values[i] + (1 - q) * option_values[i + 1])/(1+r * dt)
+            option_values[i] =  (q * option_values[i] + (1 - q) * option_values[i + 1])/np.exp(r * dt)
     
     return option_values[0]
 
