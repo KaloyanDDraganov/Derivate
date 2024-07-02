@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
+def pointsToEUR(points):
+    return points * 0.01 # We use the point exchange rate given on the website of DZ Bank
 
 def valuateOption(S0, X, T, rf, sigma, n, option_type="call"):
     
@@ -45,7 +47,7 @@ def blackScholes(S0, X, T, rf, sigma, t):
 S0 = 18131.97 
 X = 19200
 T = 0.5    
-rf = 0.03671
+rf = 0.03671 # 6 Months EURIBOR rate
 sigma = 0.1216
 
 call_price = valuateOption(S0, X, T, rf, sigma, 100, option_type="call")
@@ -54,17 +56,15 @@ black_scholes = blackScholes(S0=18131.97, X=19200, T=0.5, rf=0.03671, sigma=0.12
 print(f"Call: {call_price:.4f}")
 print(f"Black Scholes:  {black_scholes:.4f}")
 
-#put_price = valuateOption(S0, X, T, rf, sigma, 100, option_type="put")
-#print(f"Put:  {put_price:.4f}")
-
 n_values = list(range(1, 1000))
-prices = list(map(lambda n: valuateOption(n=n, T=0.5, S0=18131.97, X=19200, sigma=0.1216, rf=0.03671), n_values))
+prices = list(map(lambda n: pointsToEUR(valuateOption(n=n, T=0.5, S0=18131.97, X=19200, sigma=0.1216, rf=0.03671)), n_values))
 
-plt.plot(n_values, prices, marker='o', linestyle='-', color='b', label='Option price against n')
-plt.axhline(y=black_scholes, linestyle='-', color='r', label='Black Scholes')
+plt.plot(n_values, prices, marker='o', linestyle='-', color='b', label='Binomial Price against n')
+plt.axhline(y=pointsToEUR(black_scholes), linestyle='-', color='r', label='Black Scholes Price')
+plt.axhline(y=3.91, linestyle='-', color='g', label='Option Market Price')
 plt.xscale('log')
 plt.title("Calculating a call price with the binomial method")
 plt.xlabel("Log-Scaled n values")
-plt.ylabel("Option Price in points")
+plt.ylabel("Option Price in €")
 plt.legend()
 plt.show()
