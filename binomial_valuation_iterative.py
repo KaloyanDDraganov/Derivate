@@ -51,13 +51,13 @@ rf = 0.03671 # 6 Months EURIBOR rate
 sigma = 0.1216
 
 call_price = valuateOption(S0, X, T, rf, sigma, 100, option_type="call")
-black_scholes = blackScholes(S0=18131.97, X=19200, T=0.5, rf=0.03671, sigma=0.1216, t=0)
+black_scholes = blackScholes(S0, X, T, rf, sigma, t=0)
 
 print(f"Call: {call_price:.4f}")
 print(f"Black Scholes:  {black_scholes:.4f}")
 
 n_values = list(range(1, 1000))
-prices = list(map(lambda n: pointsToEUR(valuateOption(n=n, T=0.5, S0=18131.97, X=19200, sigma=0.1216, rf=0.03671)), n_values))
+prices = list(map(lambda n: pointsToEUR(valuateOption(S0, X, T, rf, sigma, n, option_type="call")), n_values))
 
 plt.plot(n_values, prices, marker='o', linestyle='-', color='b', label='Binomial Price against n')
 plt.axhline(y=pointsToEUR(black_scholes), linestyle='-', color='r', label='Black Scholes Price')
