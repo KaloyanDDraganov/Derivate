@@ -15,7 +15,7 @@ def valuateOption(S0, X, T, rf, sigma, n, option_type="call"):
     d = 1 / u
     
     # Calculate the risk-neutral probability
-    q = ((1+rf * dt) - d) / (u - d)
+    q = (np.exp(rf * dt) - d) / (u - d)
     
     # Initialize the stock prices at maturity
     stock_prices = np.zeros(n + 1)
