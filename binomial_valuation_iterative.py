@@ -39,32 +39,32 @@ def valuateOption(S0, X, T, rf, sigma, n, option_type="call"):
     return option_values[0]
 
 def blackScholes(S0, X, T, rf, sigma, t):
-    d1 = (np.log(S0/X)+(rf + (sigma*sigma)/2)*(T-t)) / (sigma * np.sqrt(T-t))
+    d1 = (np.log(S0/X)+(rf + (sigma ** 2)/2)*(T-t)) / (sigma * np.sqrt(T-t))
 
     C = S0 * norm.cdf(d1) - X* np.exp(-rf *(T-t)) * norm.cdf(d1-sigma*np.sqrt(T-t))
     return C
 
-S0 = 18131.97 
+S0 = 18131.97
 X = 19200
-T = 0.5    
-rf = 0.03671 # 6 Months EURIBOR rate
+T = 0.5
+rf = 0.03695 # 6 Months EURIBOR rate on June 18th 2024
 sigma = 0.1216
 
 call_price = valuateOption(S0, X, T, rf, sigma, 100, option_type="call")
 black_scholes = blackScholes(S0, X, T, rf, sigma, t=0)
 
-print(f"Call: {call_price:.4f}")
-print(f"Black Scholes:  {black_scholes:.4f}")
+print(f"Binomial Call Valuation @n=100: {pointsToEUR(call_price):.2f}")
+print(f"Black-Scholes Valuation:        {pointsToEUR(black_scholes):.2f}")
 
 n_values = list(range(1, 1000))
 prices = list(map(lambda n: pointsToEUR(valuateOption(S0, X, T, rf, sigma, n, option_type="call")), n_values))
 
-plt.plot(n_values, prices, marker='o', linestyle='-', color='b', label='Binomial Price against n')
-plt.axhline(y=pointsToEUR(black_scholes), linestyle='-', color='r', label='Black Scholes Price')
-plt.axhline(y=3.91, linestyle='-', color='g', label='Option Market Price')
+plt.plot(n_values, prices, marker='o', linestyle='-', color='b', label='Binomial Valuation')
+plt.axhline(y=pointsToEUR(black_scholes), linestyle='-', color='r', label='Black-Scholes Valuation')
+plt.axhline(y=3.96, linestyle='-', color='g', label='Option Market Value')
 plt.xscale('log')
-plt.title("Calculating a call price with the binomial method")
-plt.xlabel("Log-Scaled n values")
-plt.ylabel("Option Price in €")
+plt.title("Calculating a Call Price with the Binomial Method")
+plt.xlabel("n (log-scaled)")
+plt.ylabel("Option Price [€]")
 plt.legend()
 plt.show()
